@@ -13,7 +13,7 @@ use Inertia\Inertia;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,12 +24,15 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});
+// Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+//     Route::get('/dashboard', function () {
+//         return Inertia::render('Dashboard');
+//     })->name('dashboard');
+// });
+
+Route::get('/dashboard', [App\Http\Controllers\PageController::class, 'dashboard'])
+    ->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
+    ->name('dashboard');
+
+Route::resource('notes', App\Http\Controllers\NoteController::class)
+    ->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']);
